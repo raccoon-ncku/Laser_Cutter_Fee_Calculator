@@ -43,3 +43,28 @@ MAT_FACTOR = {
     "chipboard":1,
     "paperboard":1
 }
+
+equivalent_speed = CUTTER_SPEED / (MAT_FACTOR[MATERIAL]*THICKNESS)
+equivalent_cutting_time = total_cutting_length / equivalent_speed
+
+# As for engraving, we use a constant speed to calculate the fee
+# no matter what parameters are actually used.
+equivalent_cutting_time += total_engraving_length / CUTTER_SPEED
+
+# Finally, we multiply the price with the operatiing factor to 
+# cover the other expense of Maker Space laser cutters.
+
+OPERATING_COST_FACTOR = 1.1
+
+UNIT_PRICE = 5
+fee = round(equivalent_cutting_time * UNIT_PRICE * OPERATING_COST_FACTOR, 0)
+
+print(
+    "{}mm {}\nTotal cutting length is {}mm\nTotal engraving length is {}mm\nCutting fee is NTD${}".format(
+        THICKNESS,
+        MATERIAL,
+        round(total_cutting_length, 0),
+        round(total_engraving_length, 0),
+        fee
+    )
+)
